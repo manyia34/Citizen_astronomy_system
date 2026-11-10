@@ -1,0 +1,42 @@
+def read_int(prompt, low=None, high=None):
+    """Read an integer; raise ValueError if it is not a number or out of range."""
+    value = int(input(prompt))
+    if (low is not None and value < low) or (high is not None and value > high):
+        raise ValueError(f"{value} is outside the allowed range {low}-{high}")
+    return value
+
+
+def collect_observations(observer_name):
+    observations = []
+    counter = 1
+    print("Catalogue:", ", ".join(FULL_CATALOGUE))
+    print("Type DONE to finish.")
+    while True:
+        object_name = input("\nObject name (or DONE) : ").strip().title()
+        if object_name == "Done":
+            break
+        if object_name not in FULL_CATALOGUE:
+            print(f"  [REJECTED] '{object_name}' is not in the catalogue.")
+            continue
+        try:   # Milestone 5 (c): ValueError handling
+            duration = read_int("Duration (minutes)    : ", 1, 600)
+            cloud_cover = read_int("Cloud cover (%)       : ", 0, 100)
+            pollution = read_int("Light pollution (1-5) : ", 1, 5)
+            rating = read_int("Visibility (1-5)      : ", 1, 5)
+            category = FULL_CATALOGUE[object_name]
+            obs_id = f"{observer_name[:3].upper()}-{object_name[:3].upper()}-{counter:02d}"
+            if category == "Meteor Shower":
+                meteors = read_int("Meteor count          : ", 0)
+                obs = MeteorObservation(obs_id, observer_name, object_name,
+                                        category, duration, rating, meteors)
+            else:
+                obs = SkyObservation(obs_id, observer_name, object_name,
+                                     category, duration, rating)
+        except ValueError as error:
+            print(f"  [HANDLED] ValueError: {error}. Observation not saved.")
+            continue
+        observations.append(obs)
+        counter += 1
+        print(f"  [SAVED] {obs_id} | viewing score = "
+              f"{viewing_score(rating, cloud_cover, pollution)}")
+    return observations

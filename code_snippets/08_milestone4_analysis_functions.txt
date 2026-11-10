@@ -1,0 +1,55 @@
+def total_observation_time(observations):
+    total = 0
+    for obs in observations:
+        total += obs.duration_minutes
+    return total
+
+
+def average_visibility(observations):
+    # milestone 5 (d) - handling ZeroDivisionError when list is empty
+    try:
+        total = sum(obs.visibility_rating for obs in observations)
+        return total / len(observations)
+    except ZeroDivisionError:
+        print("  [HANDLED] ZeroDivisionError: no valid observations for average.")
+        return 0.0
+
+
+def session_summary(observations):
+    # returns a dictionary with the summary of the whole session
+    categories = set()
+    meteors = 0
+    for obs in observations:
+        categories.add(obs.category)
+        if isinstance(obs, MeteorObservation):
+            meteors += obs.meteor_count
+
+    return {
+        "total_observations": len(observations),
+        "total_time_minutes": total_observation_time(observations),
+        "average_rating": round(average_visibility(observations), 2),
+        "unique_categories": sorted(categories),
+        "total_meteors": meteors,
+    }
+
+
+def high_quality_observations(observations, minimum_rating=4):
+    # minimum_rating is a default parameter
+    return [obs for obs in observations if obs.visibility_rating >= minimum_rating]
+
+
+def is_long_session(obs):
+    return obs.duration_minutes >= 60
+
+
+# name of analysis -> function used for filtering
+ANALYSIS_MAP = {
+    "HIGH_RATING": lambda obs: obs.visibility_rating >= 4,
+    "LONG_SESSION": is_long_session,
+    "METEOR_ONLY": lambda obs: isinstance(obs, MeteorObservation),
+}
+
+
+def run_analysis(observations, analysis_name):
+    selected_function = ANALYSIS_MAP[analysis_name]
+    return list(filter(selected_function, observations))

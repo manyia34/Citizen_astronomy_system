@@ -1,0 +1,8 @@
+SKY,NEH-JUP-01,Neha,Jupiter,Planet,94,4,0
+SKY,NEH-ORI-02,Neha,Orion,Constellation,60,5,0
+METEOR,NEH-PER-03,Neha,Perseids,Meteor Shower,70,5,42
+SKY,NEH-AND-04,Neha,Andromeda,Galaxy,30,2,0
+SKY,NEH-JUP-01,Neha,Jupiter,Planet,95,4,0
+SKY,NEH-ORI-02,Neha,Orion,Constellation,60,5,0
+METEOR,NEH-PER-03,Neha,Perseids,Meteor Shower,70,5,42
+SKY,NEH-AND-04,Neha,Andromeda,Galaxy,30,2,0

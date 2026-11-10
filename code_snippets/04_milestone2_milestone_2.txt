@@ -1,0 +1,68 @@
+def milestone_2():
+    print("\n=== MILESTONE 2: Full Night Session ===")
+    print("Catalouge:", ", ".join(CATALOUGE))
+    print("Type Done to finish")
+
+    observations = []
+    categories = set()
+
+    while True:
+        obj = input("\nObject name (or Done) : ").strip().title()
+        if obj == "Done":
+            break
+
+        # object must be in the catalouge
+        if obj not in CATALOUGE:
+            print("Rejected -", obj, "is not in the catalouge")
+            continue
+
+        duration = int(input("Duration (minutes) : "))
+        rating = int(input("Visibility (1-5) : "))
+
+        # rating should be between 1 and 5
+        if rating < 1 or rating > 5:
+            print("Rejected - rating", rating, "is not between 1 and 5")
+            continue
+
+        quality = classify_rating(rating)
+        category = CATALOUGE[obj]
+        categories.add(category)
+
+        record = {
+            "object": obj,
+            "category": category,
+            "duration": duration,
+            "rating": rating,
+            "quality": quality,
+        }
+        observations.append(record)
+        print("Saved:", obj, "(" + category + ") ->", quality)
+
+    print("\n----- NIGHT SESSION SUMMARY -----")
+
+    total = len(observations)
+    print("Total Observations :", total)
+    if total == 0:
+        print("No valid observations recorded.")
+        return
+
+    # adding up time and ratings
+    total_time = 0
+    rating_sum = 0
+    for o in observations:
+        total_time += o["duration"]
+        rating_sum += o["rating"]
+    avg = rating_sum / total
+
+    print("Total Time :", total_time, "min (" + str(total_time // 60), "hr", total_time % 60, "min)")
+    print("Unique Categories :", sorted(categories))
+    print("Average Rating :", round(avg, 2))
+
+    # sorting by rating, highest first
+    observations.sort(key=lambda o: o["rating"], reverse=True)
+
+    print("\nSorted (highest to lowest rating):")
+    print(f"{'Object':<11}{'Category':<15}{'Minutes':<9}{'Rating':<8}Quality")
+    for o in observations:
+        print(f"{o['object']:<11}{o['category']:<15}{o['duration']:<9}"
+              f"{o['rating']:<8}{o['quality']}")

@@ -1,0 +1,18 @@
+# objects that are allowed in a night session
+CATALOUGE = {
+    "Jupiter": "Planet",
+    "Saturn": "Planet",
+    "Orion": "Constellation",
+    "Pleiades": "Star Cluster",
+    "Andromeda": "Galaxy",
+}
+
+
+def classify_rating(rating):
+    # 5 = Excellent, 3 or 4 = Good, below 3 = Poor
+    if rating == 5:
+        return "Excellent"
+    elif rating >= 3:
+        return "Good"
+    else:
+        return "Poor"

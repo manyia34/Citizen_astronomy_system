@@ -1,0 +1,25 @@
+class MeteorObservation(SkyObservation):
+    # child class, same as SkyObservation + meteor_count
+
+    def __init__(self, observation_id, observer_name, object_name,
+                 category, duration_minutes, visibility_rating, meteor_count):
+        # calling the parent constructor
+        super().__init__(observation_id, observer_name, object_name,
+                         category, duration_minutes, visibility_rating)
+        self.meteor_count = meteor_count
+
+    # overriding parent method (polymorphism)
+    def observation_summary(self):
+        summary = super().observation_summary()
+        summary += f" | Meteors: {self.meteor_count}"
+        return summary
+
+    def to_log_line(self):
+        parts = ["METEOR", self.observation_id, self.observer_name, self.object_name,
+                 self.category, self.duration_minutes, self.visibility_rating,
+                 self.meteor_count]
+        return ",".join(str(p) for p in parts)
+
+    def __str__(self):
+        return (f"MeteorObservation({self.observation_id}, {self.object_name}, "
+                f"meteors={self.meteor_count})")

@@ -1,0 +1,45 @@
+LOG_FILE = "night_sky_log.txt"
+
+
+# milestone 2 catalouge + meteor showers (needed for MeteorObservation)
+FULL_CATALOGUE = dict(CATALOUGE)
+FULL_CATALOGUE["Perseids"] = "Meteor Shower"
+FULL_CATALOGUE["Geminids"] = "Meteor Shower"
+
+
+def append_to_log(observations, filename):
+    with open(filename, "a") as file:
+        for obs in observations:
+            file.write(obs.to_log_line() + "\n")
+
+
+def read_log(filename):
+    """Read the log and rebuild objects; skip malformed lines safely.
+    Raises FileNotFoundError if the file does not exist (handled by caller)."""
+    records = []
+    skipped = 0
+    with open(filename, "r") as file:
+        for line_no, line in enumerate(file, start=1):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                parts = line.split(",")
+                if len(parts) != 8:
+                    raise ValueError(f"expected 8 fields, got {len(parts)}")
+                kind, obs_id, observer, obj, cat, dur, rating, meteors = parts
+                dur, rating, meteors = int(dur), int(rating), int(meteors)
+                if kind == "METEOR":
+                    records.append(MeteorObservation(obs_id, observer, obj, cat,
+                                                     dur, rating, meteors))
+                else:
+                    records.append(SkyObservation(obs_id, observer, obj, cat,
+                                                  dur, rating))
+            except ValueError as error:
+                skipped += 1
+                print(f"  [SKIPPED] Malformed record at line {line_no}: {line!r} ({error})")
+    return records, skipped
+
+
+def file_size_bytes(filename):
+    return os.path.getsize(filename)

@@ -1,0 +1,12 @@
+def milestone_3():
+    print("\n=== MILESTONE 3: Inheritance and Polymorphism ===")
+    print("Organization:", SkyObservation.organization_name)
+
+    sky = SkyObservation("OBS-001", "Neha", "Jupiter", "Planet", 95, 4)
+    meteor = MeteorObservation("OBS-002", "Neha", "Perseids", "Meteor Shower", 60, 5, 42)
+
+    # same methods called on both objects, output is different (polymorphism)
+    for obs in [sky, meteor]:
+        print("\n__str__()             :", obs)
+        print("quality_label()       :", obs.quality_label())
+        print("observation_summary() :", obs.observation_summary())

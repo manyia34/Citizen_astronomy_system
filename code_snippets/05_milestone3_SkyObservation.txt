@@ -1,0 +1,33 @@
+class SkyObservation:
+    # parent class, stores one night sky observation
+
+    organization_name = "Citizen Astronomy Club"
+
+    def __init__(self, observation_id, observer_name, object_name,
+                 category, duration_minutes, visibility_rating):
+        self.observation_id = observation_id
+        self.observer_name = observer_name
+        self.object_name = object_name
+        self.category = category
+        self.duration_minutes = duration_minutes
+        self.visibility_rating = visibility_rating
+
+    def quality_label(self):
+        return classify_rating(self.visibility_rating)
+
+    def observation_summary(self):
+        # one line summary of the observation
+        label = self.quality_label()
+        summary = f"[{self.observation_id}] {self.object_name} ({self.category}) "
+        summary += f"by {self.observer_name} | {self.duration_minutes} min | "
+        summary += f"Rating {self.visibility_rating} -> {label}"
+        return summary
+
+    def to_log_line(self):
+        # meteor count is 0 for normal sky observation
+        parts = ["SKY", self.observation_id, self.observer_name, self.object_name,
+                 self.category, self.duration_minutes, self.visibility_rating, 0]
+        return ",".join(str(p) for p in parts)
+
+    def __str__(self):
+        return f"SkyObservation({self.observation_id}, {self.object_name})"

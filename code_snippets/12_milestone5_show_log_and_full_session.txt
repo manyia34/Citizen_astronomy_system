@@ -1,0 +1,28 @@
+def show_log():
+    """Milestone 5: read valid records, skip malformed ones, show metadata."""
+    print(f"\n----------- SAVED LOG: {LOG_FILE} -----------")
+    try:
+        records, skipped = read_log(LOG_FILE)
+    except FileNotFoundError:
+        print(f"  [HANDLED] FileNotFoundError: '{LOG_FILE}' does not exist yet.")
+        return
+    for rec in records:
+        print("  ", rec.observation_summary())
+    print("\nStored valid records :", len(records))
+    print("Malformed skipped    :", skipped)
+    print("File size (bytes)    :", file_size_bytes(LOG_FILE))
+
+
+def full_session():
+    print("\n=== MILESTONE 4 + 5: Full Session, Analysis and Log ===")
+    observer_name = input("Observer name : ").strip() or "Unknown"
+    observations = collect_observations(observer_name)
+    # timer starts after input, so it measures only the report generation
+    start_time = time.time()
+    print_report(observations, start_time)
+    if observations:
+        append_to_log(observations, LOG_FILE)
+        print(f"\n{len(observations)} observation(s) appended to {LOG_FILE}")
+        show_log()
+    else:
+        print("\nNo valid observations - nothing written to the log.")
